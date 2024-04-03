@@ -1,4 +1,5 @@
 # React Note App Example
+![react note app example](https://github.com/J-Player/React-Note-App-Example/assets/48096757/396a02f3-1332-48fe-9904-00bf73c2aeea)
 Um simples gerenciador de notas do usuário.
 Foi desenvolvido usando a MERN stack (MongoDB, ExpressJS, React e NodeJS)
 
