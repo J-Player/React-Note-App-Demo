@@ -7,6 +7,10 @@ const NoteSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    userId: {
+        type: String,
+        required: true
+    }
 })
 
 const NoteModel = mongoose.model('note', NoteSchema)
