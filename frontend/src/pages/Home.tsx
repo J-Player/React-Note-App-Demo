@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import { createNote, deleteNote, findAllNote, updateNote } from "./api"
-import NoteModel from "./models/Note"
-import Note from "./components/Note"
+import NoteModel from "../models/Note"
+import Note from "../components/Note"
 import styled from "styled-components"
-import { Color } from "./styles/palette"
+import { Color } from "../styles/palette"
+import api from "../api"
+import useAuth from "../hooks/useauth"
 
-const AppContainer = styled.div`
+const HomeContainer = styled.div`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -13,14 +14,36 @@ const AppContainer = styled.div`
 	min-height: 100vh;
 	header {
 		background-color: ${Color.bg_primary};
-		display: grid;
-		place-items: center;
 		width: 100%;
 		color: ${Color.text_primary};
 		padding: 2rem;
-		h1 {
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		span, h1 {
 			font-size: 2rem;
+		}
+		h1 {
+			position: absolute;
+			left: 50%;
+			translate: -50%;
 			text-transform: uppercase;
+		}
+		button {
+			background-color: transparent;
+			border: 2px solid transparent;
+			border-radius: 0.5rem;
+			cursor: pointer;
+			font-weight: bold;
+			padding: 1rem;
+			font-size: 1.6rem;
+			border-color: red;
+			color: red;
+			&:hover {
+				color: ${Color.text_primary};
+				background-color: red;
+			}
 		}
 	}
 
@@ -105,30 +128,34 @@ const AppContainer = styled.div`
 	}
 `
 
-const App = () => {
+const Home = () => {
 	const [noteList, setNoteList] = useState<NoteModel[]>([])
+	const { handleLogout } = useAuth()
 
 	useEffect(() => {
-		findAllNote().then((r) => setNoteList(r.data))
+		api.get("/notes/all").then((r) => setNoteList(r.data))
 	}, [])
 
 	const handlerAddNote = async () => {
-		const response = await createNote({ title: "Title here", description: "Description here" })
+		const response = await api.post("/notes", { title: "Title here", description: "Description here" })
 		if (response.status == 201) {
-			setNoteList((prev) => [
-				{ _id: response.data._id, title: response.data.title, description: response.data.description },
-				...prev,
-			])
+			const note: NoteModel = {
+				_id: response.data._id,
+				title: response.data.title,
+				description: response.data.description,
+				userId: response.data.userId,
+			}
+			setNoteList((prev) => [note, ...prev])
 		}
 	}
 
 	const handlerDeleteAllNote = () => {
-		noteList.map((n) => deleteNote(n._id!))
+		noteList.map((n) => api.delete(`/notes/${n._id}`))
 		setNoteList([])
 	}
 
 	const handlerEditNote = async (id: string, note: NoteModel) => {
-		const response = await updateNote(id, note)
+		const response = await api.put(`/notes/${id}`, note)
 		if (response.status == 204) {
 			setNoteList((prev) => {
 				const notes = [...prev]
@@ -145,16 +172,18 @@ const App = () => {
 	}
 
 	const handlerDeleteNote = async (id: string) => {
-		const response = await deleteNote(id)
+		const response = await api.delete(`/notes/${id}`)
 		if (response.status == 204) {
 			setNoteList((prev) => prev.filter((n) => n._id !== id))
 		}
 	}
 
 	return (
-		<AppContainer>
+		<HomeContainer>
 			<header>
+				<span>Account: John</span>
 				<h1>Notes</h1>
+				<button onClick={handleLogout}>Logout</button>
 			</header>
 			<div className='btn-wrapper'>
 				<button className='btn-create-note' onClick={handlerAddNote}>
@@ -180,8 +209,8 @@ const App = () => {
 					})}
 				</div>
 			</main>
-		</AppContainer>
+		</HomeContainer>
 	)
 }
 
-export default App
+export default Home

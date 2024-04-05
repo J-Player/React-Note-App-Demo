@@ -4,7 +4,8 @@ const NoteController = {
 
     findById: async (req, res) => {
         const id = req.params.id
-        const note = await Note.findById(id)
+        const { user } = req.token
+        const note = await Note.findOne({_id: id, userId: user._id})
         if (note) {
             res.status(200).json(note)
         } else {
@@ -13,26 +14,31 @@ const NoteController = {
     },
 
     findAll: async (req, res) => {
-        const notes = await Note.find()
+        const { user } = req.token
+        const notes = await Note.find({ userId: user._id })
         res.status(200).json(notes)
     },
 
     save: async (req, res) => {
+        const { user } = req.token
         const note = {
             title: req.body.title,
             description: req.body.description,
+            userId: user._id
         }
         const noteSaved = await Note.create(note)
         res.status(201).json(noteSaved)
     },
 
     update: async (req, res) => {
+        const { user } = req.token
         const note = {
             title: req.body.title,
             description: req.body.description,
+            userId: user._id
         }
         const id = req.params.id
-        const noteUpdated = await Note.findByIdAndUpdate(id, note, {new: true})
+        const noteUpdated = await Note.findOneAndUpdate({ _id: id, userId: user._id }, note, { new: true })
         if (noteUpdated) {
             res.status(204).json(noteUpdated)
         } else {
@@ -42,7 +48,8 @@ const NoteController = {
 
     delete: async (req, res) => {
         const id = req.params.id
-        const noteDeleted = await Note.findByIdAndDelete(id)
+        const { user } = req.token
+        const noteDeleted = await Note.findOneAndDelete({ _id: id, userId: user._id })
         if (noteDeleted) {
             res.status(204).json(noteDeleted)
         } else {
