@@ -32,7 +32,7 @@ const AuthController = {
         } else {
             const user = await User.create({username: username, password: passwordEncrypted})
             if (user) {
-                res.status(200).json(user)
+                res.status(201).json(user)
             } else {
                 res.status(500).json({message: "Ocorreu um erro ao tentar registrar o usuário."})
             }
