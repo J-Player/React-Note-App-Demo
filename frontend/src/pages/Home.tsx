@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import NoteModel from "../models/Note"
-import Note from "../components/Note"
+import NoteCard from "../components/NoteCard"
 import styled from "styled-components"
 import { Color } from "../styles/palette"
 import api from "../api"
@@ -197,11 +197,9 @@ const Home = () => {
 				<div className='note-list-wrapper'>
 					{noteList.map((n) => {
 						return (
-							<Note
+							<NoteCard
 								key={n._id}
-								title={n.title}
-								description={n.description}
-								id={n._id}
+								note={n}
 								handleDeleteNote={handlerDeleteNote}
 								handleEditNote={handlerEditNote}
 							/>

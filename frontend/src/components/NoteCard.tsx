@@ -2,18 +2,16 @@ import { useRef, useState } from "react"
 import NoteModel from "../models/Note"
 
 interface Props {
-	id?: string
-	title: string
-	description: string
+	note: NoteModel
 	handleDeleteNote: (id: string) => void
 	handleEditNote: (id: string, note: NoteModel) => void
 }
 
-const Note = (props: Props) => {
+const NoteCard = (props: Props) => {
 	const [editing, setEditing] = useState(false)
-	const [id, setId] = useState(props.id)
-	const [title, setTitle] = useState(props.title)
-	const [description, setDescription] = useState(props.description)
+	const [id, setId] = useState(props.note._id)
+	const [title, setTitle] = useState(props.note.title)
+	const [description, setDescription] = useState(props.note.description)
 	const { handleDeleteNote, handleEditNote } = props
 	const titleRef = useRef<HTMLInputElement>(null)
 	const descriptionRef = useRef<HTMLTextAreaElement>(null)
@@ -23,17 +21,17 @@ const Note = (props: Props) => {
 	}
 
 	const handlerCancelEdit = async () => {
-		setId(props.id)
-		setTitle(props.title)
-		setDescription(props.description)
+		setId(props.note._id)
+		setTitle(props.note.title)
+		setDescription(props.note.description)
 		setEditing(false)
 	}
 
 	const handlerConfirmEdit = async () => {
-		setId(props.id)
+		setId(props.note._id)
 		setTitle(titleRef.current!.value)
 		setDescription(descriptionRef.current!.value)
-		handleEditNote(id!, { title: title, description: description })
+		handleEditNote(id!, { title: title, description: description, userId: props.note.userId })
 		setEditing(false)
 	}
 
@@ -86,4 +84,4 @@ const Note = (props: Props) => {
 	)
 }
 
-export default Note
+export default NoteCard

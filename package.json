@@ -1,0 +1,13 @@
+{
+  "name": "react-note-app-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/src/index.js",
+  "scripts": {
+    "build": "npm install --prefix ./frontend && npm run build --prefix ./frontend && npm install --prefix ./backend",
+    "start": "npm run server --prefix ./backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

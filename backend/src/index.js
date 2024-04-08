@@ -1,22 +1,25 @@
-const express = require('express')
+const express = require("express")
 const server = express()
-const cors = require('cors')
+const cors = require("cors")
 
-const connectDB = require('./db/connection')
-const routes = require('./routes/router')
+const connectDB = require("./db/connection")
+const routes = require("./routes/router")
 
-const { databaseConfig, apiConfig } = require('./configs/')
+const path = require('path')
+
+const { apiConfig } = require("./configs/")
 
 server.use(cors())
 server.use(express.json())
-server.use('/api', routes)
+server.use("/api", routes)
+server.use(express.static(path.join(__dirname, '../../frontend/dist')))
+server.use("*", (req, res) => res.sendFile(path.join(__dirname, '../../frontend/dist/index.html')))
 
 const PORT = apiConfig.port
 
-const { user, pass, host, port } = databaseConfig
-
-connectDB(user, pass, host, port)
-
-server.listen(PORT, () => {
-    console.log('Server online!')
-})
+connectDB().then(() => {
+    console.log('Connected to the database')
+	server.listen(PORT, () => {
+		console.log("Server online!")
+	})
+}).catch(err => console.error(err))
