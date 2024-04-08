@@ -1,6 +1,5 @@
 const express = require("express")
 const server = express()
-const cors = require("cors")
 
 const connectDB = require("./db/connection")
 const routes = require("./routes/router")
@@ -9,7 +8,6 @@ const path = require('path')
 
 const { apiConfig } = require("./configs/")
 
-server.use(cors())
 server.use(express.json())
 server.use("/api", routes)
 server.use(express.static(path.join(__dirname, '../../frontend/dist')))
