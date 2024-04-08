@@ -8,11 +8,14 @@ Foi desenvolvido usando a MERN stack (MongoDB, ExpressJS, React e NodeJS)
 - Node 18 ou superior
 
 ## Como usar
-1. Instale as dependências do backend e do frontend:
-<pre><code>cd backend && npm i && cd ../frontend && npm i && cd ..</code></pre>
-2. Inicialize o `docker-compose.yml` do banco de dados:
-<pre><code>cd backend && docker compose up</code></pre>
-3. Inicialize a API (no diretório "backend"):
-<pre><code>cd backend && npm run dev</code></pre>
-4. Inicialize a aplicação React (no diretório "frontend"):
-<pre><code>cd frontend && npm run dev</code></pre>
+1. No diretório `backend`, crie um arquivo `.env` com as seguintes propriedades:
+<pre><code>
+  JWT_SECRET= # A palavra secreta para usar na assinatura dos tokens JWT
+  DB_URI= # A URI do banco de dados MongoDB (opcional - Por padrão usará a URI do docker-compose.yml)
+</code></pre>
+2. Ainda no diretório `backend`, inicialize o `docker-compose.yml` do banco de dados:
+<pre><code>docker compose up -d</code></pre>
+3. Na raiz do projeto, instale as dependências:
+<pre><code>npm run build</code></pre>
+4. Inicialize a aplicação:
+<pre><code>npm start</code></pre>
