@@ -13,7 +13,7 @@ server.use(cors())
 server.use(express.json())
 server.use("/api", routes)
 server.use(express.static(path.join(__dirname, '../../frontend/dist')))
-server.use("*", (req, res) => res.sendFile(path.join(__dirname, '../../frontend/dist/index.html')))
+server.get("*", (req, res) => res.sendFile(path.join(__dirname, '../../frontend/dist/index.html')))
 
 const PORT = apiConfig.port
 
