@@ -1,11 +1,10 @@
+require('dotenv').config()
+
 module.exports = {
     databaseConfig: {
-        user: process.env.userdb || 'root',
-        pass: process.env.passdb || 'example',
-        host: process.env.hostdb || 'localhost',
-        port: process.env.portdb || 27017,
+        uri: process.env.DB_URI || 'mongodb://root:example@localhost:27017/'
     },
     apiConfig: {
-        port: process.env.port || 3000
+        port: process.env.API_PORT || 3000
     }
 }
