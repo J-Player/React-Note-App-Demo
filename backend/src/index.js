@@ -22,4 +22,4 @@ connectDB().then(() => {
 	server.listen(PORT, () => {
 		console.log("Server online!")
 	})
-})
+}).catch(err => console.error(err))
