@@ -16,7 +16,7 @@ const AuthController = {
             if (!validPassword) {
                 res.status(400).json({message: "Password incorrect."})
             } else {
-                const token = jwt.sign({ user }, process.env.JWT_SECRET, { expiresIn: '1d' })
+                const token = jwt.sign({ user }, process.env.JWT_SECRET, { subject: user.username })
                 res.status(200).json({access_token: token})
             }
         }

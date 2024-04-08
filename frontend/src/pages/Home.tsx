@@ -5,6 +5,7 @@ import styled from "styled-components"
 import { Color } from "../styles/palette"
 import api from "../api"
 import useAuth from "../hooks/useauth"
+import { JwtPayload, jwtDecode } from "jwt-decode"
 
 const HomeContainer = styled.div`
 	display: flex;
@@ -131,6 +132,7 @@ const HomeContainer = styled.div`
 const Home = () => {
 	const [noteList, setNoteList] = useState<NoteModel[]>([])
 	const { handleLogout } = useAuth()
+	const token = jwtDecode<JwtPayload>(localStorage.getItem('token')!)
 
 	useEffect(() => {
 		api.get("/notes/all").then((r) => setNoteList(r.data))
@@ -181,7 +183,7 @@ const Home = () => {
 	return (
 		<HomeContainer>
 			<header>
-				<span>Account: John</span>
+				<span>Welcome back, {token.sub}!</span>
 				<h1>Notes</h1>
 				<button onClick={handleLogout}>Logout</button>
 			</header>
